@@ -1,3 +1,4 @@
 M33::Application.routes.draw do
-  root :to => "home#index"
+  match '', :via => :post, :controller => "snhu_connector", :action => 'create'
+  match '', :via => :get, :controller => "snhu_connector", :action => 'status'
 end
