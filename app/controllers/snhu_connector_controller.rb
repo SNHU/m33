@@ -12,24 +12,18 @@ class SnhuConnectorController < ApplicationController
       market_seg = params['ESM_MarketSegment']
       stage_number = params['ESM_StageNum']
 
-      @list = nil
 
-      if ['UDD', 'INT'].include? market_seg
-        @list = SubscriptionList.new(
-          mill33_list_id: 42, #TODO - market_seg_list_id
-          snhu_code: market_seg
-        )
-      elsif stage_number == 300
-        @list = SubscriptionList.new(
-          mill33_list_id: 4242, #TODO - stage_number_list_id
-          snhu_code: 'stage_list'
-        )
-      end
+      if (['UDD', 'INT'].include? market_seg) || (stage_number == 300)
+        
+        #
+        # Ignore these posts, return 200 code
+        #
+        head :ok
 
-      #
-      # Map to a list for that particular course code
-      #
-      if @list.nil?
+      else
+        #
+        # Map to a list for that particular course code
+        #
         @list = SubscriptionList.find_by_snhu_code(program_of)
 
         #
@@ -52,11 +46,20 @@ class SnhuConnectorController < ApplicationController
           @result = HTTParty.post("http://clients.mill33.com/api/subscriber_lists/#{list_id}/subscribers", :headers => headers, :body => body)
           
           if @result.success?
+            #
+            # We created the subscriber
+            #
             head :created
           else
+            #
+            # There was an error with the post.
+            #
             head :internal_server_error
           end
         else
+          #
+          # Could not find an appropriate list
+          #
           head :not_found
         end
       end
