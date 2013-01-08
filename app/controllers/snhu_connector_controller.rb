@@ -41,7 +41,6 @@ class SnhuConnectorController < ApplicationController
           headers = {"AUTHORIZATION" => "Token token=\"#{ENV['MILL33_API_KEY']}\"", "Accept" => 'application/vnd.mill33.com; version=1'}
           body = {
             email: email,
-            confirmed_state: 'confirmed',
             custom_fields: params.reject {|k,v| k=='ESM_Email'}
           }
           @result = HTTParty.post("http://clients.mill33.com/api/subscriber_lists/#{list_id}/subscribers", :headers => headers, :body => body)
