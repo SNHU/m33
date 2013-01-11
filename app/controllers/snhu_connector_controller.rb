@@ -13,7 +13,7 @@ class SnhuConnectorController < ApplicationController
       stage_number = params['ESM_StageNum']
 
 
-      if (['UDD', 'INT'].include? market_seg) || (stage_number == 300)
+      if (['UDD', 'INT'].include? market_seg) || (stage_number.to_s == '300')
         
         #
         # Ignore these posts, return 200 code
