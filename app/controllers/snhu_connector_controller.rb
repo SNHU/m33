@@ -1,6 +1,6 @@
 class SnhuConnectorController < ApplicationController
   respond_to :json
-  before_filter :restrict_access, :except => [:status]
+  #before_filter :restrict_access, :except => [:status]
   def status
     render :template => "home/index"
   end
@@ -11,6 +11,9 @@ class SnhuConnectorController < ApplicationController
       program_of = params['ESM_ProgramofInterest']
       market_seg = params['ESM_MarketSegment']
       stage_number = params['ESM_StageNum']
+
+      # Fix to allow for poorly encoded addreses that contain '+'
+      email = email.strip.gsub(/\s+/, '+')
 
 
       if (['UDD', 'INT'].include? market_seg) || (stage_number.to_s == '300')
@@ -27,7 +30,7 @@ class SnhuConnectorController < ApplicationController
         if (program_of.match /^(MED|MSN)/i)
           program_of = program_of[0..2]
         end
-
+        debugger
         @list = SubscriptionList.find_by_snhu_code(program_of)
 
         #
@@ -47,6 +50,8 @@ class SnhuConnectorController < ApplicationController
             email: email.strip,
             custom_fields: params.reject {|k,v| k=='ESM_Email'}
           }
+          puts "email: #{email}----------------------"
+          puts "body-email: #{body[:email]}"
           @result = HTTParty.post("http://clients.mill33.com/api/subscriber_lists/#{list_id}/subscribers", :headers => headers, :body => body)
           
           if @result.success?
