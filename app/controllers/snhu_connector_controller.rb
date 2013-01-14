@@ -13,7 +13,8 @@ class SnhuConnectorController < ApplicationController
       stage_number = params['ESM_StageNum']
 
       # Fix to allow for poorly encoded addreses that contain '+'
-      email.strip!.gsub!(/\s+/, '+')
+      email.strip!
+      email.gsub!(/\s+/, '+')
 
 
       if (['UDD', 'INT'].include? market_seg) || (stage_number.to_s == '300')
@@ -31,7 +32,7 @@ class SnhuConnectorController < ApplicationController
           program_of = program_of[0..2]
         end
 
-        @list = SubscriptionList.find_by_snhu_code(program_of)
+        @list = SubscriptionList.find_by_snhu_code('Generic Programs')#(program_of)
 
         #
         # Double check that the lists are up to date and
