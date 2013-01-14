@@ -35,12 +35,11 @@ class SnhuConnectorController < ApplicationController
         #
         # Map to a list for that particular course code
         #
-        @list = SubscriptionList.find_by_snhu_code(program_of)
+        @list = SubscriptionList.find_by_snhu_code('Generic Programs')#(program_of)
 
         #
-        # Double check that the lists are up to date and
-        # re-run the search and either put it in the program
-        # or in the generic programs list
+        # If we didn't find the list, double check that the lists are up to date and
+        # re-run the search.  If still not found put it in the generic programs list.
         #
         unless @list      
           SubscriptionList.updateLists
