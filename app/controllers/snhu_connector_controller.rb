@@ -32,11 +32,10 @@ class SnhuConnectorController < ApplicationController
           program_of = program_of[0..2]
         end
 
-        @list = SubscriptionList.find_by_snhu_code(program_of)
-
         #
         # Map to a list for that particular course code
         #
+        @list = SubscriptionList.find_by_snhu_code(program_of)
 
         #
         # Double check that the lists are up to date and
