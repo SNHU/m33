@@ -24,6 +24,10 @@ class SnhuConnectorController < ApplicationController
         #
         # Map to a list for that particular course code
         #
+        if (program_of.match /^(MED|MSN)/i)
+          program_of = program_of[0..2]
+        end
+
         @list = SubscriptionList.find_by_snhu_code(program_of)
 
         #
