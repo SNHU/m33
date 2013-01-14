@@ -1,6 +1,6 @@
 class SnhuConnectorController < ApplicationController
   respond_to :json
-  #before_filter :restrict_access, :except => [:status]
+  before_filter :restrict_access, :except => [:status]
   def status
     render :template => "home/index"
   end
@@ -13,7 +13,7 @@ class SnhuConnectorController < ApplicationController
       stage_number = params['ESM_StageNum']
 
       # Fix to allow for poorly encoded addreses that contain '+'
-      email = email.strip.gsub(/\s+/, '+')
+      email.strip!.gsub!(/\s+/, '+')
 
 
       if (['UDD', 'INT'].include? market_seg) || (stage_number.to_s == '300')
@@ -30,7 +30,7 @@ class SnhuConnectorController < ApplicationController
         if (program_of.match /^(MED|MSN)/i)
           program_of = program_of[0..2]
         end
-        debugger
+
         @list = SubscriptionList.find_by_snhu_code(program_of)
 
         #
