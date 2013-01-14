@@ -26,13 +26,17 @@ class SnhuConnectorController < ApplicationController
 
       else
         #
-        # Map to a list for that particular course code
+        # Map special prefix codes for lists that handle multiple POIs
         #
         if (program_of.match /^(MED|MSN)/i)
           program_of = program_of[0..2]
         end
 
-        @list = SubscriptionList.find_by_snhu_code('Generic Programs')#(program_of)
+        @list = SubscriptionList.find_by_snhu_code(program_of)
+
+        #
+        # Map to a list for that particular course code
+        #
 
         #
         # Double check that the lists are up to date and
